@@ -1,16 +1,15 @@
 <?php
 // Biblioteca Obscura - Entry Point
-// Redirect to loader on first visit
-if (!isset($_COOKIE['biblioteca_entered'])) {
+// Use query param to track if coming from loader
+$fromLoader = isset($_GET['from_loader']);
+
+// First visit - show loader
+if (!$fromLoader && !isset($_COOKIE['biblioteca_entered'])) {
     setcookie('biblioteca_entered', '1', time() + (86400 * 30), '/');
-    header('Location: loader.html');
-    exit;
+    header('Location: loader.html?redirect_to=index.php%3Ffrom_loader%3D1');
+    exit();
 }
-// Biblioteca Obscura - The Grand Library
-// Redirect to loader first
-if (!isset($_COOKIE['biblioteca_loaded'])) {
-    setcookie('biblioteca_loaded', '1', time() + 3600);
-}
+// Either from loader or cookie is set - load main page
 ?>
 <!DOCTYPE html>
 <html lang="en">

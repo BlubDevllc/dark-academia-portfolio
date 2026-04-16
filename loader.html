@@ -363,19 +363,19 @@
         // AGGRESSIVE ASSET PRELOADING
         function preloadAllAssets() {
             return Promise.all([
-                // Preload CSS
-                fetch('assets/css/main.css').then(r => r.text()),
-                fetch('assets/css/animations.css').then(r => r.text()),
-                fetch('assets/css/magical.css').then(r => r.text()),
-                fetch('assets/css/library.css').then(r => r.text()),
+                // Preload CSS with fallback
+                fetch('assets/css/main.css').catch(() => null),
+                fetch('assets/css/animations.css').catch(() => null),
+                fetch('assets/css/magical.css').catch(() => null),
+                fetch('assets/css/library.css').catch(() => null),
                 
-                // Preload JS
-                fetch('assets/js/main.js').then(r => r.text()),
-                fetch('assets/js/magical.js').then(r => r.text()),
-                fetch('assets/js/library-extended.js').then(r => r.text()),
+                // Preload JS with fallback
+                fetch('assets/js/main.js').catch(() => null),
+                fetch('assets/js/magical.js').catch(() => null),
+                fetch('assets/js/library-extended.js').catch(() => null),
                 
                 // Ensure minimum load time for aesthetics
-                new Promise(resolve => setTimeout(resolve, 2500))
+                new Promise(resolve => setTimeout(resolve, 2000))
             ]);
         }
 
@@ -384,13 +384,28 @@
             createLoadParticles();
             createLoadBooks();
 
-            // Preload everything
-            preloadAllAssets().then(() => {
-                // Smooth transition
+            // SAFETY TIMEOUT: Force redirect after max 5 seconds regardless
+            const safetyTimeout = setTimeout(() => {
+                forceRedirect();
+            }, 5000);
+
+            function forceRedirect() {
+                clearTimeout(safetyTimeout);
                 document.querySelector('.loading-container').style.animation = 'fadeOut 0.8s ease-out forwards';
                 setTimeout(() => {
-                    window.location.href = 'index.php';
+                    // Get redirect target from URL param or default
+                    const params = new URLSearchParams(window.location.search);
+                    const redirectTo = params.get('redirect_to') || 'index.php?from_loader=1';
+                    window.location.href = redirectTo;
                 }, 800);
+            }
+
+            // Preload everything
+            preloadAllAssets().then(() => {
+                forceRedirect();
+            }).catch(() => {
+                // If preload fails, still redirect
+                forceRedirect();
             });
         });
     </script>
