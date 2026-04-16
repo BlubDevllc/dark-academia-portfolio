@@ -12,7 +12,14 @@ let sampleBooks = [];
 async function loadBooksFromDatabase() {
     try {
         console.log('🔍 Fetching books from API...');
-        const response = await fetch('api.php?action=get_books');
+        // Calculate base path from current pathname
+        // Current pathname: /school/web k/bibliotheca-obscura/dark-academia-portfolio/index.php
+        // We need the directory containing index.php
+        const pathname = window.location.pathname;
+        const baseDir = pathname.substring(0, pathname.lastIndexOf('/'));
+        const apiUrl = baseDir + '/api.php?action=get_books';
+        console.log('📍 API URL:', apiUrl);
+        const response = await fetch(apiUrl);
         const result = await response.json();
         
         console.log('📚 API Response:', result);

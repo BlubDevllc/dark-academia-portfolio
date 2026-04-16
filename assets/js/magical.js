@@ -314,7 +314,9 @@ class VisitorCounter {
         const counter = document.getElementById('visitor-count');
         if (counter) {
             const number = counter.querySelector('.visitor-number');
-            number.textContent = visitors;
+            if (number) {
+                number.textContent = visitors;
+            }
         }
 
         // Update books discovered counter
@@ -379,7 +381,7 @@ class BookModal {
     }
 }
 
-const modal = new BookModal();
+const bookModalInstance = new BookModal();
 
 // ============================================
 // 8. EASTER EGGS

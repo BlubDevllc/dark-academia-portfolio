@@ -348,83 +348,6 @@ class VisitorAnalytics {
 // ============================================
 // EASTER EGGS & HIDDEN COMMANDS
 // ============================================
-
-class EasterEggs {
-    constructor() {
-        this.konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-        this.konamiIndex = 0;
-        this.clickCount = 0;
-        this.init();
-    }
-
-    init() {
-        // Konami code
-        document.addEventListener('keydown', (e) => {
-            if (e.key === this.konamiCode[this.konamiIndex]) {
-                this.konamiIndex++;
-                if (this.konamiIndex === this.konamiCode.length) {
-                    this.activateGreenMode();
-                    this.konamiIndex = 0;
-                }
-            } else {
-                this.konamiIndex = 0;
-            }
-
-            // Ctrl+Alt+L - Reload library
-            if (e.ctrlKey && e.altKey && e.key === 'l') {
-                console.log("%c ◊ Reloading Biblioteca Obscura...", 'color: #C2A35D; font-size: 14px;');
-                location.reload();
-            }
-
-            // Ctrl+/ - Help
-            if (e.ctrlKey && e.key === '/') {
-                console.clear();
-                console.log('%c ✨ BIBLIOTECA OBSCURA - SECRET COMMANDS ✨', 'font-size: 18px; color: #C2A35D; font-weight: bold;');
-                console.log('%c Konami Code: ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA', 'font-size: 12px; color: #E2D3B7;');
-                console.log('%c Ctrl+Alt+L: Reload library', 'font-size: 12px; color: #E2D3B7;');
-                console.log('%c Click title 3x: Golden Age', 'font-size: 12px; color: #E2D3B7;');
-            }
-        });
-
-        // Triple-click title for Golden Age
-        const title = document.querySelector('.hero-title');
-        if (title) {
-            title.addEventListener('click', () => {
-                this.clickCount++;
-                if (this.clickCount === 3) {
-                    this.activateGoldenAge();
-                    this.clickCount = 0;
-                }
-            });
-
-            setTimeout(() => {
-                this.clickCount = 0;
-            }, 500);
-        }
-    }
-
-    activateGreenMode() {
-        console.log("%c ⚫ GREEN MODE ACTIVATED! ⚫", 'color: lime; font-size: 18px; font-weight: bold;');
-        document.body.style.filter = 'hue-rotate(115deg) saturate(2)';
-        particles.burst(window.innerWidth / 2, window.innerHeight / 2, 50);
-        
-        setTimeout(() => {
-            document.body.style.filter = 'none';
-        }, 2000);
-    }
-
-    activateGoldenAge() {
-        console.log("%c ✩ GOLDEN AGE ACTIVATED! ✩", 'color: gold; font-size: 18px; font-weight: bold;');
-        document.body.style.filter = 'sepia(100%) brightness(1.2)';
-        particles.burst(window.innerWidth / 2, window.innerHeight / 2, 50);
-        
-        setTimeout(() => {
-            document.body.style.filter = 'none';
-        }, 3000);
-    }
-}
-
-// ============================================
 // INITIALIZATION
 // ============================================
 
@@ -436,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new QuoteSystem();
     new ScrollRevealSystem();
     new VisitorAnalytics();
-    new EasterEggs();
+    // EasterEggs initialized in magical.js to avoid duplicates
     
     // Generate recommendations
     generateRecommendations();
