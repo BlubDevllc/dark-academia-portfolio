@@ -87,38 +87,13 @@ class AdvancedSearch {
 }
 
 // ============================================
-// ENHANCED BOOK MODAL SYSTEM
+// KEYBOARD SHORTCUTS FOR MODALS
 // ============================================
 
-const modal = {
-    el: document.getElementById('book-modal'),
-    open: function(bookData) {
-        document.getElementById('modal-title').textContent = bookData.title;
-        document.getElementById('modal-description').textContent = bookData.desc || 'A mysterious tome from the eternal collection.';
-        document.getElementById('modal-author').textContent = `— ${bookData.author}`;
-        document.getElementById('modal-cover').textContent = '⬥';
-        
-        // Generate random stars
-        const stars = Math.floor(Math.random() * 2) + 4;
-        document.getElementById('modal-stars').textContent = '★'.repeat(stars);
-        
-        this.el.classList.remove('hidden');
-        this.el.classList.add('visible');
-        document.body.style.overflow = 'hidden';
-        
-        // Burst particles on modal open
-        particles.burst(window.innerWidth / 2, window.innerHeight / 2, 30);
-    },
-    close: function() {
-        this.el.classList.add('hidden');
-        this.el.classList.remove('visible');
-        document.body.style.overflow = 'auto';
-    }
-};
-
-document.getElementById('book-modal').addEventListener('click', (e) => {
-    if (e.target.id === 'book-modal' || e.target.classList.contains('modal-close')) {
-        modal.close();
+// Escape key closes modal (modal system is in magical.js)
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && typeof bookModalInstance !== 'undefined') {
+        bookModalInstance.close();
     }
 });
 
@@ -399,16 +374,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     console.log("%c ◆ All magical systems initialized!", 'color: #C2A35D; font-size: 12px;');
-});
-
-// Helper function to open book modal
-function openBookModal(book) {
-    modal.open(book);
-}
-
-// Keyboard escape to close modal
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        modal.close();
-    }
 });

@@ -338,50 +338,146 @@ class BookModal {
     constructor() {
         this.modal = document.getElementById('book-modal');
         this.closeBtn = this.modal ? this.modal.querySelector('.modal-close') : null;
-        this.init();
+        this.modalContent = this.modal ? this.modal.querySelector('.modal-content') : null;
+        this.isOpen = false;
     }
 
-    init() {
-        if (this.closeBtn) {
-            this.closeBtn.addEventListener('click', () => this.close());
-        }
+    static init() {
+        const instance = new BookModal();
+        instance.setupEventListeners();
+    }
 
-        if (this.modal) {
-            this.modal.addEventListener('click', (e) => {
-                if (e.target === this.modal) this.close();
+    setupEventListeners() {
+        // Close button
+        if (this.closeBtn) {
+            this.closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.close();
             });
         }
 
-        // Add click handlers to books
+        // Close on overlay click
+        if (this.modal) {
+            this.modal.addEventListener('click', (e) => {
+                if (e.target === this.modal || e.target.classList.contains('modal-overlay')) {
+                    e.stopPropagation();
+                    this.close();
+                }
+            });
+        }
+
+        // Prevent close when clicking modal content
+        if (this.modalContent) {
+            this.modalContent.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        // Book click handler with event delegation
         document.addEventListener('click', (e) => {
-            if (e.target.closest('.book')) {
-                const book = e.target.closest('.book');
-                const title = book.dataset.title || 'Untitled Tome';
-                this.open(title);
+            const bookElement = e.target.closest('.book');
+            if (bookElement) {
+                this.openBook(bookElement);
+                e.stopPropagation();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.isOpen) {
+                this.close();
             }
         });
     }
 
-    open(title) {
-        if (!this.modal) return;
+    openBook(bookElement) {
+        if (!this.modal || this.isOpen) return;
 
+        this.isOpen = true;
         this.modal.classList.remove('hidden');
-        document.getElementById('modal-title').textContent = title;
-        document.getElementById('modal-description').textContent = 'A fascinating tome from our ancient collection...';
-        document.getElementById('modal-author').textContent = '— Attributed to the Unknown';
+
+        // Extract book data from dataset
+        const bookData = {
+            title: bookElement.dataset.title || 'Untitled Tome',
+            author: bookElement.dataset.author || 'Unknown Author',
+            description: bookElement.dataset.description || 'A mysterious tome from our collection...',
+            rating: parseInt(bookElement.dataset.rating) || 4,
+            pages: parseInt(bookElement.dataset.pages) || 0,
+            year: parseInt(bookElement.dataset.year) || 0,
+            hasImage: bookElement.dataset.hasImage === 'true',
+            imagePath: bookElement.style.backgroundImage
+        };
+
+        this.displayBook(bookData);
 
         // Trigger particles
-        particles.burst(window.innerWidth / 2, window.innerHeight / 2, 15);
+        if (window.particles) {
+            particles.burst(window.innerWidth / 2, window.innerHeight / 2, 15);
+        }
+
+        // Track book discovery
+        this.trackBookDiscovered(bookData.title);
+
+        console.log('📖 Book opened:', bookData.title);
+    }
+
+    displayBook(bookData) {
+        // Title
+        const titleEl = document.getElementById('modal-title');
+        if (titleEl) titleEl.textContent = bookData.title;
+
+        // Author
+        const authorEl = document.getElementById('modal-author');
+        if (authorEl) authorEl.textContent = `By ${bookData.author}`;
+
+        // Description
+        const descEl = document.getElementById('modal-description');
+        if (descEl) descEl.textContent = bookData.description;
+
+        // Rating stars
+        const starsEl = document.getElementById('modal-stars');
+        if (starsEl) {
+            const filledStars = '★'.repeat(bookData.rating);
+            const emptyStars = '☆'.repeat(5 - bookData.rating);
+            starsEl.textContent = filledStars + emptyStars;
+        }
+
+        // Cover image or gradient
+        const coverEl = document.getElementById('modal-cover');
+        if (coverEl) {
+            if (bookData.hasImage && bookData.imagePath) {
+                // Extract URL from backgroundImage style
+                const match = bookData.imagePath.match(/url\(['"]?([^'")]+)['"]?\)/);
+                if (match) {
+                    coverEl.style.backgroundImage = bookData.imagePath;
+                    coverEl.style.backgroundSize = 'cover';
+                    coverEl.style.backgroundPosition = 'center';
+                }
+            } else {
+                // Fallback to gradient
+                coverEl.style.backgroundImage = 'linear-gradient(135deg, #5C4D4D 0%, #3B2F2F 100%)';
+                coverEl.style.backgroundSize = 'auto';
+            }
+        }
     }
 
     close() {
-        if (this.modal) {
-            this.modal.classList.add('hidden');
+        if (!this.modal) return;
+
+        this.isOpen = false;
+        this.modal.classList.add('hidden');
+        console.log('📖 Modal closed');
+    }
+
+    trackBookDiscovered(title) {
+        const discovered = JSON.parse(localStorage.getItem('books-discovered') || '[]');
+        if (!discovered.includes(title)) {
+            discovered.push(title);
+            localStorage.setItem('books-discovered', JSON.stringify(discovered));
+            console.log(`📊 Books discovered: ${discovered.length}`);
         }
     }
 }
-
-const bookModalInstance = new BookModal();
 
 // ============================================
 // 8. EASTER EGGS

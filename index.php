@@ -9,6 +9,12 @@ if (!$fromLoader && !isset($_COOKIE['biblioteca_entered'])) {
     header('Location: loader.html?redirect_to=index.php%3Ffrom_loader%3D1');
     exit();
 }
+
+// Prevent aggressive caching to ensure latest CSS/JS
+header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
+
 // Either from loader or cookie is set - load main page
 ?>
 <!DOCTYPE html>
@@ -17,10 +23,10 @@ if (!$fromLoader && !isset($_COOKIE['biblioteca_entered'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Obscura - The Grand Library</title>
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/magical.css">
-    <link rel="stylesheet" href="assets/css/library.css">
+    <link rel="stylesheet" href="assets/css/main.css?v=4">
+    <link rel="stylesheet" href="assets/css/animations.css?v=4">
+    <link rel="stylesheet" href="assets/css/magical.css?v=4">
+    <link rel="stylesheet" href="assets/css/library.css?v=4">
 </head>
 <body>
 
@@ -134,7 +140,7 @@ if (!$fromLoader && !isset($_COOKIE['biblioteca_entered'])) {
                 <div class="modal-cover" id="modal-cover"></div>
                 <div class="modal-info">
                     <h2 id="modal-title"></h2>
-                    <p id="modal-description"></p>
+                    <p class="modal-description" id="modal-description"></p>
                     <p class="modal-author" id="modal-author"></p>
                     <div class="modal-rating">
                         <span class="stars" id="modal-stars"></span>
@@ -320,9 +326,9 @@ if (!$fromLoader && !isset($_COOKIE['biblioteca_entered'])) {
 </footer>
 
 <!-- Load JavaScript -->
-<script src="assets/js/main.js"></script>
-<script src="assets/js/magical.js"></script>
-<script src="assets/js/library-extended.js"></script>
+<script src="assets/js/main.js?v=4"></script>
+<script src="assets/js/magical.js?v=4"></script>
+<script src="assets/js/library-extended.js?v=4"></script>
 
 </body>
 </html>

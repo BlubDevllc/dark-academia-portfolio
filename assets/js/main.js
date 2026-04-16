@@ -1,65 +1,81 @@
 /**
  * BIBLIOTECA OBSCURA
- * Main JavaScript - Animations, Interactions & Effects (ENHANCED)
+ * Main JavaScript - Book Loading & Shelf Management
  */
 
-// ============================================
-// 1. SAMPLE BOOK DATA (Load from API)
-// ============================================
 let sampleBooks = [];
 
+// ============================================
 // Load books from database API
+// ============================================
 async function loadBooksFromDatabase() {
     try {
         console.log('🔍 Fetching books from API...');
-        // Calculate base path from current pathname
-        // Current pathname: /school/web k/bibliotheca-obscura/dark-academia-portfolio/index.php
-        // We need the directory containing index.php
         const pathname = window.location.pathname;
         const baseDir = pathname.substring(0, pathname.lastIndexOf('/'));
         const apiUrl = baseDir + '/api.php?action=get_books';
         console.log('📍 API URL:', apiUrl);
+        
         const response = await fetch(apiUrl);
         const result = await response.json();
-        
         console.log('📚 API Response:', result);
         
         if (result.success && result.data && result.data.length > 0) {
             console.log(`✅ Found ${result.data.length} books in database`);
             
-            // Generate color for each book
-            const colors = ['#4A3F3F', '#5A4A4A', '#6A5555', '#7A6666', '#6D6A4A', '#5B4A5F', '#7A5A6A', '#6A5A5A', '#5A5A4A', '#4B4A4A'];
+            // Dark academia color palette for books
+            const colors = ['#4A3F3F', '#5A4A4A', '#6A5555', '#7A6666', '#6D6A4A', '#5B4A5F', '#7A5A6A', '#6A5A5A', '#5A5A4A', '#8B5F4D'];
             
             sampleBooks = result.data.map((book, idx) => ({
                 id: book.id,
-                title: book.title,
-                author: book.author || 'Unknown',
-                description: book.description || '',
-                cover: colors[idx % colors.length],
-                image_path: book.image_path || ''
+                title: book.title || 'Unknown Title',
+                author: book.author || 'Anonymous',
+                description: book.description || 'No description available',
+                cover_color: colors[idx % colors.length],
+                image_path: book.image_path || null,
+                rating: Math.floor(Math.random() * 3) + 3,
+                pages: book.pages || 0,
+                published_year: book.published_year || 0
             }));
         } else {
             console.warn('⚠️ No books from API, using fallback');
-            // Fallback data if API fails
             sampleBooks = [
-                { title: "The Midnight Codex", author: "Unknown", cover: "#4A3F3F", image_path: '' },
-                { title: "Shadows of Eternity", author: "A. Midnight", cover: "#5A4A4A", image_path: '' },
-                { title: "The Luminous Path", author: "M. Thinker", cover: "#6A5555", image_path: '' }
+                { 
+                    id: 1,
+                    title: "The Midnight Codex", 
+                    author: "Unknown", 
+                    description: "A mysterious tome of midnight secrets",
+                    cover_color: "#4A3F3F", 
+                    image_path: null,
+                    rating: 5,
+                    pages: 234,
+                    published_year: 1823
+                }
             ];
         }
     } catch (error) {
         console.error('❌ Error loading books:', error);
-        // Emergency fallback
         sampleBooks = [
-            { title: "The Midnight Codex", author: "Unknown", cover: "#4A3F3F", image_path: '' }
+            { 
+                id: 1,
+                title: "The Midnight Codex", 
+                author: "Unknown", 
+                description: "A mysterious tome",
+                cover_color: "#4A3F3F", 
+                image_path: null,
+                rating: 5,
+                pages: 234,
+                published_year: 1823
+            }
         ];
     }
-    console.log('Building shelves with', sampleBooks.length, 'books');
+    
+    console.log('📚 Building shelves with', sampleBooks.length, 'books');
     buildBookShelves();
 }
 
 // ============================================
-// 2. BUILD BOOK SHELVES (ENHANCED)
+// Build book shelves with proper styling
 // ============================================
 function buildBookShelves() {
     const bookshelf = document.getElementById('bookshelf-1');
@@ -70,34 +86,62 @@ function buildBookShelves() {
 
     console.log('🏗️ Building shelf with', sampleBooks.length, 'books');
     bookshelf.innerHTML = '';
-
-    // Force bookshelf to be visible and sized
-    bookshelf.style.display = 'grid';
-    bookshelf.style.gridTemplateColumns = 'repeat(auto-fit, minmax(120px, 1fr))';
-    bookshelf.style.gap = '30px';
-    bookshelf.style.minHeight = '250px';
-    bookshelf.style.padding = '40px';
-    bookshelf.style.visibility = 'visible';
-    bookshelf.style.opacity = '1';
-    bookshelf.style.zIndex = '10';
-
+    
     if (!sampleBooks || sampleBooks.length === 0) {
         console.warn('⚠️ No books to display');
-        bookshelf.innerHTML = '<p style="color: #C2A35D; padding: 20px; text-align: center;">The shelves await their volumes...</p>';
+        bookshelf.innerHTML = '<p style="color: #C2A35D; padding: 20px; text-align: center; grid-column: 1/-1;">The shelves await their volumes...</p>';
         return;
     }
 
     sampleBooks.forEach((bookData, index) => {
         const book = document.createElement('div');
-        book.className = 'book fade-in glow-hover';
+        book.className = 'book';
         
-        // FORCE visibility with inline styles
-        book.style.display = 'flex';
-        book.style.visibility = 'visible';
-        book.style.opacity = '1';
-        book.style.width = '100%';
-        book.style.height = 'auto';
-        book.style.minWidth = '120px';
+        // Store book data in attributes for modal
+        book.dataset.id = bookData.id;
+        book.dataset.title = bookData.title;
+        book.dataset.author = bookData.author;
+        book.dataset.description = bookData.description;
+        book.dataset.rating = bookData.rating;
+        book.dataset.pages = bookData.pages;
+        book.dataset.year = bookData.published_year;
+        
+        // Random rotation for organic feel (between -3 and 3 degrees)
+        const rotation = (Math.random() * 6) - 3;
+        book.style.setProperty('--rotation', rotation);
+        
+        // Set book color
+        book.style.setProperty('--book-color', bookData.cover_color);
+        
+        // If book has image, use it as background
+        if (bookData.image_path) {
+            const baseDir = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+            const imagePath = baseDir + '/' + bookData.image_path;
+            book.style.backgroundImage = `url('${imagePath}')`;
+            book.dataset.hasImage = 'true';
+        } else {
+            book.dataset.hasImage = 'false';
+        }
+        
+        // Add title attribute for spine text
+        book.setAttribute('data-title', bookData.title);
+        
+        bookshelf.appendChild(book);
+    });
+    
+    console.log('✅ Shelf built with', sampleBooks.length, 'books');
+}
+
+// ============================================
+// Initialize on page load
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('📖 DOM loaded, initializing...');
+    loadBooksFromDatabase();
+    
+    // Initialize modal system
+    BookModal.init();
+});
         book.style.minHeight = '180px';
         book.style.zIndex = '1';
         

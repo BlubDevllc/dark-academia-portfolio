@@ -218,102 +218,7 @@ p {
         0 0 25px rgba(194, 163, 93, 0.1);
 }
 
-/* ============================================
-   BOOK COMPONENT STYLES
-   ============================================ */
-
-.book {
-    position: relative;
-    transform: rotateZ(calc(var(--rotation, 0) * 1deg));
-    cursor: pointer;
-    overflow: hidden;
-    
-    /* Optimized transitions - no expensive perspective */
-    transition: 
-        transform 0.24s cubic-bezier(0.23, 1, 0.320, 1),
-        z-index 0.24s ease-out;
-    
-    /* Prepare browser for animation */
-    will-change: transform;
-}
-
-.book:hover {
-    /* Smooth lift effect - no 3D perspective */
-    transform: translateY(-12px) scale(1.04) rotateZ(calc(var(--rotation, 0) * 1deg));
-    z-index: 10;
-}
-
-.book-cover {
-    position: relative;
-    aspect-ratio: 3/4;
-    background: linear-gradient(
-        135deg,
-        var(--deep-espresso) 0%,
-        var(--muted-olive) 50%,
-        var(--deep-espresso) 100%
-    );
-    border-radius: 2px;
-    overflow: hidden;
-    box-shadow: 
-        3px 3px 8px rgba(28, 27, 26, 0.5),
-        inset 0 0 20px rgba(194, 163, 93, 0.05);
-    
-    /* Fast, responsive transitions */
-    transition: 
-        box-shadow 0.22s ease-out,
-        filter 0.22s ease-out;
-}
-
-.book-cover::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent 0%, rgba(194, 163, 93, 0.1) 50%, transparent 100%);
-    opacity: 0;
-    transition: opacity 0.22s ease-out;
-    pointer-events: none;
-}
-
-.book:hover .book-cover::before {
-    opacity: 1;
-}
-
-.book-cover::after {
-    content: "⬥";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-    pointer-events: none;
-}
-
-.book:hover .book-cover::after {
-    opacity: 0.3;
-}
-
-.book-title {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: var(--spacing-md);
-    background: linear-gradient(to top, rgba(28, 27, 26, 0.95), transparent);
-    color: var(--antique-gold);
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    font-weight: 600;
-    text-align: center;
-    transform: translateY(100%);
-    transition: transform 0.22s cubic-bezier(0.23, 1, 0.320, 1);
-    pointer-events: none;
-}
-
-.book:hover .book-title {
-    transform: translateY(0);
-}
+/* Book styles moved to magical.css for unified shelf experience */
 
 /* ============================================
    GOLD BORDER - luxury detail
@@ -541,34 +446,7 @@ section {
     margin-bottom: var(--spacing-xl);
 }
 
-/* ============================================
-   BOOK SHELVES SECTION
-   ============================================ */
-
-.shelves {
-    background: linear-gradient(
-        180deg,
-        rgba(59, 47, 47, 0.3) 0%,
-        rgba(28, 27, 26, 0.2) 100%
-    );
-}
-
-.bookshelves {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: var(--spacing-xl);
-    padding: var(--spacing-xl);
-    background: rgba(28, 27, 26, 0.4);
-    border-radius: 4px;
-    border: 1px solid rgba(194, 163, 93, 0.1);
-}
-
-.bookshelf {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--spacing-md);
-    align-content: start;
-}
+/* Bookshelf section styles moved to magical.css for unified shelf experience */
 
 /* ============================================
    CATALOG SEARCH SECTION
