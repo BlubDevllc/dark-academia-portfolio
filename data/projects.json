@@ -1,0 +1,28 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "The Gothic Novel",
+      "description": "A comprehensive study on gothic literature and its aesthetic principles",
+      "category": "Academic",
+      "year": 2024,
+      "tags": ["literature", "gothic", "analysis"]
+    },
+    {
+      "id": 2,
+      "title": "Dark Reflections",
+      "description": "Personal essays exploring the intersections of knowledge and beauty",
+      "category": "Essays",
+      "year": 2024,
+      "tags": ["philosophy", "aesthetics", "reflection"]
+    },
+    {
+      "id": 3,
+      "title": "Shadows & Light",
+      "description": "A portfolio of visual works inspired by dark academia",
+      "category": "Visual Arts",
+      "year": 2023,
+      "tags": ["design", "art", "dark-academia"]
+    }
+  ]
+}

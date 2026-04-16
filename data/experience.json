@@ -1,0 +1,22 @@
+{
+  "experience": [
+    {
+      "year": "2024",
+      "title": "Lead Designer",
+      "organization": "Creative Studios",
+      "description": "Directed the design of multiple dark academia-inspired projects"
+    },
+    {
+      "year": "2023",
+      "title": "Web Developer",
+      "organization": "Digital Innovation Lab",
+      "description": "Built responsive, aesthetic-focused web experiences"
+    },
+    {
+      "year": "2022",
+      "title": "Junior Developer",
+      "organization": "Tech Collective",
+      "description": "Started journey into web development and design"
+    }
+  ]
+}

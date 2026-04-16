@@ -1,0 +1,22 @@
+{
+  "testimonials": [
+    {
+      "author": "Prof. Margaret Stone",
+      "role": "Academic Advisor",
+      "text": "An exceptional understanding of how aesthetics and functionality intertwine.",
+      "rating": 5
+    },
+    {
+      "author": "Dr. Alexander Blake",
+      "role": "Design Colleague",
+      "text": "The dark academia aesthetic is captured with remarkable authenticity.",
+      "rating": 5
+    },
+    {
+      "author": "Emma Renaissance",
+      "role": "Client",
+      "text": "A truly transformative approach to digital expression.",
+      "rating": 5
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "skills": [
+    {
+      "category": "Design",
+      "skills": [
+        {"name": "UI/UX Design", "proficiency": 95},
+        {"name": "Dark Academia Aesthetics", "proficiency": 98},
+        {"name": "Typography", "proficiency": 90}
+      ]
+    },
+    {
+      "category": "Development",
+      "skills": [
+        {"name": "HTML/CSS", "proficiency": 95},
+        {"name": "JavaScript", "proficiency": 90},
+        {"name": "PHP", "proficiency": 85}
+      ]
+    },
+    {
+      "category": "Creative",
+      "skills": [
+        {"name": "Visual Storytelling", "proficiency": 92},
+        {"name": "Curation", "proficiency": 88},
+        {"name": "Academic Writing", "proficiency": 90}
+      ]
+    }
+  ]
+}

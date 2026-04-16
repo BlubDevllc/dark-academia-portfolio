@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Obscura - Loading...</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1C1B1A 0%, #3B2F2F 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Cormorant Garamond', serif;
+            position: relative;
+        }
+
+        /* Ambient particles during load */
+        #load-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .load-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(194, 163, 93, 0.6);
+            border-radius: 50%;
+            animation: loadFloat var(--duration) linear infinite;
+        }
+
+        @keyframes loadFloat {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .loading-container {
+            position: relative;
+            z-index: 100;
+            text-align: center;
+        }
+
+        .library-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            animation: libraryFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes libraryFloat {
+            0%, 100% {
+                transform: translateY(0px) rotateZ(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-20px) rotateZ(5deg);
+                opacity: 0.8;
+            }
+        }
+
+        .loading-title {
+            font-size: 2.5rem;
+            color: #C2A35D;
+            letter-spacing: 3px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(194, 163, 93, 0.3);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% {
+                text-shadow: 0 0 20px rgba(194, 163, 93, 0.3);
+            }
+            50% {
+                text-shadow: 0 0 40px rgba(194, 163, 93, 0.6);
+            }
+        }
+
+        .loading-subtitle {
+            font-size: 1.1rem;
+            color: #E2D3B7;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+            opacity: 0.8;
+            font-style: italic;
+            animation: fadeInOut 2s ease-in-out infinite;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Mystical loading bar */
+        .mystical-bar {
+            width: 200px;
+            height: 3px;
+            background: rgba(194, 163, 93, 0.2);
+            margin: 0 auto 30px;
+            position: relative;
+            border-radius: 2px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(194, 163, 93, 0.2);
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                #C2A35D, 
+                transparent);
+            box-shadow: 0 0 15px rgba(194, 163, 93, 0.8);
+            animation: barMove 2s ease-in-out infinite;
+        }
+
+        @keyframes barMove {
+            0% {
+                width: 0%;
+                left: 0%;
+            }
+            50% {
+                width: 100%;
+                left: 0%;
+            }
+            100% {
+                width: 0%;
+                left: 100%;
+            }
+        }
+
+        /* Floating books */
+        .floating-books-loader {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .book-loader {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: bookFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes bookFloat {
+            0% {
+                transform: translateY(100vh) rotateZ(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.2;
+            }
+            90% {
+                opacity: 0.2;
+            }
+            100% {
+                transform: translateY(-100vh) rotateZ(360deg);
+                opacity: 0;
+            }
+        }
+
+        .loading-text {
+            font-size: 0.95rem;
+            color: #8B7D75;
+            letter-spacing: 1px;
+            margin-top: 20px;
+        }
+
+        .dots {
+            display: inline-block;
+            width: 20px;
+        }
+
+        .dots::after {
+            content: "...";
+            animation: dots steps(3, end) 1.5s infinite;
+        }
+
+        @keyframes dots {
+            as%,
+            25% {
+                content: ".";
+            }
+            50% {
+                content: "..";
+            }
+            75% {
+                content: "...";
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+
+        /* Magical lines that cross */
+        .load-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .load-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(194, 163, 93, 0.3), transparent);
+            animation: lineMove 3s ease-in-out infinite;
+        }
+
+        .line-horizontal {
+            width: 100%;
+            height: 1px;
+            top: 30%;
+        }
+
+        .line-horizontal-2 {
+            width: 100%;
+            height: 1px;
+            top: 60%;
+            animation-delay: 1s;
+        }
+
+        @keyframes lineMove {
+            0% {
+                left: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                left: 100%;
+                opacity: 0;
+            }
+        }
+
+        /* Glow background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(
+                circle at 50% 50%,
+                rgba(194, 163, 93, 0.1),
+                transparent 60%
+            );
+            animation: pulseGlow 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.15;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="floating-books-loader" id="books-loader"></div>
+    <div class="load-lines">
+        <div class="load-line line-horizontal"></div>
+        <div class="load-line line-horizontal-2"></div>
+    </div>
+    <div id="load-particles"></div>
+
+    <!-- Main loading content -->
+    <div class="loading-container">
+        <div class="library-icon">✦</div>
+        <div class="loading-title">BIBLIOTECA OBSCURA</div>
+        <div class="loading-subtitle">Awakening the library...</div>
+        
+        <div class="mystical-bar">
+            <div class="bar-fill"></div>
+        </div>
+
+        <div class="loading-text">
+            Enchanting the shelves<span class="dots"></span>
+        </div>
+    </div>
+
+    <script>
+        // Generate floating particles
+        function createLoadParticles() {
+            const container = document.getElementById('load-particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('load-particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.setProperty('--duration', (3 + Math.random() * 3) + 's');
+                particle.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+                particle.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Generate floating books
+        function createLoadBooks() {
+            const container = document.getElementById('books-loader');
+            const books = ['◆', '❖', '✦', '⬥', '✧', '◆'];
+            for (let i = 0; i < 8; i++) {
+                const book = document.createElement('div');
+                book.classList.add('book-loader');
+                book.textContent = books[i % books.length];
+                book.style.left = Math.random() * 100 + '%';
+                book.style.animationDelay = i * 0.7 + 's';
+                container.appendChild(book);
+            }
+        }
+
+        // AGGRESSIVE ASSET PRELOADING
+        function preloadAllAssets() {
+            return Promise.all([
+                // Preload CSS
+                fetch('assets/css/main.css').then(r => r.text()),
+                fetch('assets/css/animations.css').then(r => r.text()),
+                fetch('assets/css/magical.css').then(r => r.text()),
+                fetch('assets/css/library.css').then(r => r.text()),
+                
+                // Preload JS
+                fetch('assets/js/main.js').then(r => r.text()),
+                fetch('assets/js/magical.js').then(r => r.text()),
+                fetch('assets/js/library-extended.js').then(r => r.text()),
+                
+                // Ensure minimum load time for aesthetics
+                new Promise(resolve => setTimeout(resolve, 2500))
+            ]);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createLoadParticles();
+            createLoadBooks();
+
+            // Preload everything
+            preloadAllAssets().then(() => {
+                // Smooth transition
+                document.querySelector('.loading-container').style.animation = 'fadeOut 0.8s ease-out forwards';
+                setTimeout(() => {
+                    window.location.href = 'index.php';
+                }, 800);
+            });
+        });
+    </script>
+</body>
+</html>
