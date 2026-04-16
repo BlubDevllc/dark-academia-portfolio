@@ -403,20 +403,8 @@ function setupRatingStars() {
 }
 
 // ============================================
-// 9. GLOW HOVER
 // ============================================
-function setupGlowHover() {
-    const glowElements = document.querySelectorAll('.glow-hover');
-
-    glowElements.forEach(el => {
-        el.addEventListener('mouseenter', function() {
-            this.style.transition = 'all 0.3s ease';
-        });
-    });
-}
-
-// ============================================
-// 10. TRACK BOOKS DISCOVERED
+// 9. TRACK BOOKS DISCOVERED
 // ============================================
 function trackBooksDiscovered() {
     document.querySelectorAll('.book').forEach(book => {
@@ -440,7 +428,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSearch();
     setupSmoothScroll();
     setupRatingStars();
-    setupGlowHover();
     trackBooksDiscovered();
 
     console.log('★ The library is alive and breathing.');
