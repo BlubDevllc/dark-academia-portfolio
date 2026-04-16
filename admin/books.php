@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rarity = $_POST['rarity'] ?? 'Common';
             $rating = (int)($_POST['rating'] ?? 0);
             $pages = (int)($_POST['pages'] ?? 0);
-            $isbn = $_POST['isbn'] ?? '';
+            $isbn = !empty($_POST['isbn']) ? $_POST['isbn'] : null;  // NULL for empty ISBN
             $published_year = (int)($_POST['published_year'] ?? date('Y'));
             $language = $_POST['language'] ?? 'English';
 
@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $rarity = $_POST['rarity'] ?? 'Common';
             $rating = (int)($_POST['rating'] ?? 0);
             $pages = (int)($_POST['pages'] ?? 0);
-            $isbn = $_POST['isbn'] ?? '';
+            $isbn = !empty($_POST['isbn']) ? $_POST['isbn'] : null;  // NULL for empty ISBN
             $published_year = (int)($_POST['published_year'] ?? date('Y'));
             $language = $_POST['language'] ?? 'English';
 
